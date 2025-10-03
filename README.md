@@ -1,5 +1,6 @@
 ## Предполагаемая структура проекта
 
+```
 inventory_app/
 ├─ app/
 │  ├─ __init__.py
@@ -17,3 +18,4 @@ inventory_app/
 ├─ docker-compose.yml
 ├─ requirements.txt
 └─ README.md
+```
