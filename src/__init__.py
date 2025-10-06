@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flasgger import Swagger
 
@@ -25,11 +27,18 @@ def create_app():
         "basePath": "/"
     })
 
-    # Инициализация базы (при старте dev, если нужно)
-    Base.metadata.create_all(bind=engine)  # для prod используем Alembic!
+    env = os.getenv('FLASK_ENV', 'development')
+
+    # Инициализация базы
+    if env == 'development':
+        # Локальная разработка - быстрое создание таблиц
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database tables created via SQLAlchemy (dev mode)")
+    elif env == 'production':
+        # Продакшн (Docker) - миграции уже применены в CMD
+        print("✅ Running in production mode (Alembic migrations applied)")
 
     # Регистрация роутов
-    # from .api import register_routes
     app.register_blueprint(orders_bp)
 
     return app
